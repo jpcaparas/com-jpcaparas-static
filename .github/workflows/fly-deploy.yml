@@ -5,8 +5,13 @@ jobs:
     name: Deploy to Fly
     runs-on: ubuntu-latest
     steps:
-      - actions/checkout@v2
-      - superfly/flyctl-actions/setup-flyctl@master
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+
+      - name: Setup FlyCTL
+        id: setup-flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to Fly
         id: deploy
