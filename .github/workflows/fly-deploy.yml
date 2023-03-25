@@ -2,7 +2,7 @@ name: Deploy to Fly
 on: [ push ]
 jobs:
   deploy:
-  name: Deploy proxy
+    name: Deploy proxy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
