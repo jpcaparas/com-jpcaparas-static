@@ -2,23 +2,25 @@ name: Deploy to Fly
 on: [ push ]
 jobs:
   deploy:
-    - name: Deploy proxy
-      id: deploy
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: superfly/flyctl-actions/setup-flyctl@master
-        - run: flyctl deploy --remote-only
-          env:
-            FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    name: Deploy to Fly
+    id: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Fly
+        uses:
+          - actions/checkout@v2
+          - superfly/flyctl-actions/setup-flyctl@master
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-    # https://github.com/marketplace/actions/actions-for-discord
-    # https://dev.to/cardinalby/scheduling-delayed-github-action-12a6
-    # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
-    - name: Discord notification
-      if: steps.deploy.outcome == 'success'
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      uses: Ilshidur/action-discord@master
-      with:
-        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+      # https://github.com/marketplace/actions/actions-for-discord
+      # https://dev.to/cardinalby/scheduling-delayed-github-action-12a6
+      # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+      - name: Discord notification
+        if: steps.deploy.outcome == 'success'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
