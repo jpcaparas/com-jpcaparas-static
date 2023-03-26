@@ -39,9 +39,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Push to AWS ECR
+      - name: Build for AWS ECR
+        id: ecr-build
         run: docker build --tag gostatic:v1 .
-        id: ecr
+
+      - name: Push to AWS ECR
+        id: ecr-push
         uses: jwalton/gh-ecr-push@v1
         with:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
